@@ -100,7 +100,7 @@ RUN cp -r /app/ExpressionEngine/www/* /var/www/html/.
 
 Adding xdebug.ini as specified above with the following configuration: 
 
-```dosini
+```
 
 zend_extension=xdebug
 [xdebug]
@@ -126,7 +126,7 @@ $viewtype_prefs = unserialize(ee()->input->cookie('viewtype'));
 
 We can see that our breakpoint was hit by sending the following request: 
 
-```HTTP
+```
 
 GET /admin.php?/cp/addons/settings/filepicker HTTP/1.1
 Host: localhost:30001
