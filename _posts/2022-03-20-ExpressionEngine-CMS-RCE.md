@@ -24,7 +24,7 @@ It is acknowledged that the methodology and approach for conducting manual sourc
 
 The most common approach while reviewing a code is to look at the paths by starting from the source or the sinks.
 
-<img width="927" alt="image" src="https://user-images.githubusercontent.com/4347574/226132644-40eb2e6e-fe1a-4978-96d7-867732078851.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226132644-40eb2e6e-fe1a-4978-96d7-867732078851.png">
 
 
 > Example of **sources** in PHP:
@@ -43,11 +43,11 @@ The most common approach while reviewing a code is to look at the paths by start
 
 After cloning the project and looking around for the interesting **sinks**, there was a snippet that caught my eyes to look deeper into which is located at the following path:  `system/ee/ExpressionEngine/Service/File/ViewType.php`{: .filepath}
 
-<img width="1155" alt="image" src="https://user-images.githubusercontent.com/4347574/226133562-a65d0bcf-9ea1-4880-ab35-75a61aa44c1d.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133562-a65d0bcf-9ea1-4880-ab35-75a61aa44c1d.png">
 
 tracing back the source which is used to be parsed in the `unserialize()` function, it was found to be coming from the cookie input and the cookie name has to be `exp_viewtype`
 
-<img width="1218" alt="image" src="https://user-images.githubusercontent.com/4347574/226133669-2f5d0c2b-7c8f-42cf-8731-e751e916c602.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133669-2f5d0c2b-7c8f-42cf-8731-e751e916c602.png">
 
 ## Runtime debugging 
 
@@ -57,13 +57,17 @@ Now it is the time to poke around and test our inputs in the runtime, my prefere
 
 The settings for VSCode and docker to setup remote debugging is quite easy, you can add configuration in VSCode with the following: 
 
-<img width="415" alt="image" src="https://user-images.githubusercontent.com/4347574/226133777-cf88cdcc-baee-4b37-9d0e-c317b27c87fe.png">
+```json
+
+```
+
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133777-cf88cdcc-baee-4b37-9d0e-c317b27c87fe.png">
 
 ### Docker configuration 
 
 There are many docker templates which you can use to dockerize php application with database, you can use: https://github.com/amalendukundu/myonlineedu-php-mysql-docker/tree/master. A little bit of modification to add xdebug while running the app: 
 
-```docker
+```dockerfile
 FROM php:7.2-apache
 
 RUN apt-get update && apt-get install -y
@@ -83,7 +87,7 @@ RUN cp -r /app/ExpressionEngine/www/* /var/www/html/.
 
 Adding xdebug.ini as specified above with the following configuration: 
 
-```
+```dosini
 zend_extension=xdebug
 
 [xdebug]
