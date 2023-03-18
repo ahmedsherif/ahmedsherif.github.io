@@ -5,6 +5,5 @@ categories: [ctf,ctf-deployment]
 tags: [ctf,ctf-deployment]     # TAG names should always be lowercase
 ---
 
-# [External] Building-up and organizing CTF events — Nginx & Docker
 
-[Medium post](https://medium.com/@sherif_ninja/running-up-and-organizing-ctf-events-nginx-docker-481834229ba4)
+## [Medium post](https://medium.com/@sherif_ninja/running-up-and-organizing-ctf-events-nginx-docker-481834229ba4)
