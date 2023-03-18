@@ -34,3 +34,5 @@ The most common approach while reviewing a code is to look at the paths by start
 
 `system/ee/ExpressionEngine/Service/File/ViewType.php`{: .filepath}
 
+<img width="927" alt="image" src="https://user-images.githubusercontent.com/4347574/226132644-40eb2e6e-fe1a-4978-96d7-867732078851.png">
+
