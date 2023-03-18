@@ -15,47 +15,22 @@ It is acknowledged that the methodology and approach for conducting manual sourc
 
 ## sources and sinks
 
+The most common approach while reviewing a code is to look at the paths by starting from the source or the sinks.
+
+
+
+> Example of **sources** in PHP:
+> - `$_GET[]`
+> - `$_POST[]`
+> - `$_COOKIE[]`
+
+> Example of interesting **sinks** in PHP:
+> - `eval()`
+> - `call_user_func()`
+> - `require()`
+> - `readfile()`
+> - `unserialize()`
 
 
 `system/ee/ExpressionEngine/Service/File/ViewType.php`{: .filepath}
 
-```shell
-echo 'No more line numbers!'
-x = test;
-```
-
-
-```yaml
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-```
-
-```python
-import os
-import subprocess
-
-# env vars from launch.json 
-ghidraHeadless = os.getenv('GHIDRA_HEADLESS')
-projectPath = os.getenv('PROJECT_PATH')
-projectName = os.getenv('PROJECT_NAME')
-binary = os.path.basename(os.getenv('BINARY'))
-script =  os.getenv('HEADLESS_SCRIPT')
-properties = script.split('.')[0] + '.properties'
-properties_template = '''program={program}'''
-
-
-# Arguments to pass to Ghidra
-
-args = [ghidraHeadless, projectPath, projectName, "-postscript", script]
-
-print(args)
-
-with open(properties, 'w') as f:
-    f.write(properties_template.format(program=binary))
-
-with open(properties, 'r') as f:
-    print(f.read())
-
-subprocess.run(args)
-```
