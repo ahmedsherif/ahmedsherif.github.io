@@ -43,8 +43,7 @@ The most common approach while reviewing a code is to look at the paths by start
 
 After cloning the project and looking around for the interesting **sinks**, there was a snippet that caught my eyes to look deeper into which is located at the following path:  `system/ee/ExpressionEngine/Service/File/ViewType.php`{: .filepath}
 
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133562-a65d0bcf-9ea1-4880-ab35-75a61aa44c1d.png">
-
+![image](https://user-images.githubusercontent.com/4347574/226138101-3e7593cc-c55a-4cdf-94d5-1a662a4a828f.png)
 tracing back the source which is used to be parsed in the `unserialize()` function, it was found to be coming from the cookie input and the cookie name has to be `exp_viewtype`
 
 <img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133669-2f5d0c2b-7c8f-42cf-8731-e751e916c602.png">
