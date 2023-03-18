@@ -1,8 +1,8 @@
 ---
 title: ExpressionEngine CMS - From Code Review to RCE
 date: 2022-03-20 13:33:37 +/-TTTT
-categories: [codereview,CVE-2023-22953]
-tags: [codereview, CVE-2023-22953]     # TAG names should always be lowercase
+categories: [codereview,cve-2023-22953]
+tags: [codereview, cve-2023-22953]     # TAG names should always be lowercase
 ---
 
 ## Introduction
@@ -13,7 +13,7 @@ In this article, we will dive into the details of a recent vulnerability we disc
 
 As described by ExpressionEngine vendor `ExpressionEngine is a flexible, feature-rich, free open-source content management platform that empowers hundreds of thousands of individuals and organizations around the world to easily manage their web site.`
 
-<img width="714" alt="image" src="https://user-images.githubusercontent.com/4347574/226133044-20b16b1a-fb1c-4ca5-8a1b-49a141d1a30a.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133044-20b16b1a-fb1c-4ca5-8a1b-49a141d1a30a.png">
 
 
 ## Manual code review
@@ -24,7 +24,7 @@ It is acknowledged that the methodology and approach for conducting manual sourc
 
 The most common approach while reviewing a code is to look at the paths by starting from the source or the sinks.
 
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226132644-40eb2e6e-fe1a-4978-96d7-867732078851.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226132644-40eb2e6e-fe1a-4978-96d7-867732078851.png">
 
 
 > Example of **sources** in PHP:
@@ -43,11 +43,11 @@ The most common approach while reviewing a code is to look at the paths by start
 
 After cloning the project and looking around for the interesting **sinks**, there was a snippet that caught my eyes to look deeper into which is located at the following path:  `system/ee/ExpressionEngine/Service/File/ViewType.php`{: .filepath}
 
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133562-a65d0bcf-9ea1-4880-ab35-75a61aa44c1d.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133562-a65d0bcf-9ea1-4880-ab35-75a61aa44c1d.png">
 
 tracing back the source which is used to be parsed in the `unserialize()` function, it was found to be coming from the cookie input and the cookie name has to be `exp_viewtype`
 
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133669-2f5d0c2b-7c8f-42cf-8731-e751e916c602.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133669-2f5d0c2b-7c8f-42cf-8731-e751e916c602.png">
 
 ## Runtime debugging 
 
@@ -58,10 +58,23 @@ Now it is the time to poke around and test our inputs in the runtime, my prefere
 The settings for VSCode and docker to setup remote debugging is quite easy, you can add configuration in VSCode with the following: 
 
 ```json
-
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug on Docker",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "pathMappings": {
+                "/var/www/html/": "${workspaceFolder}/"
+            }
+        }
+    ]
+}
 ```
 
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/4347574/226133777-cf88cdcc-baee-4b37-9d0e-c317b27c87fe.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226133777-cf88cdcc-baee-4b37-9d0e-c317b27c87fe.png">
 
 ### Docker configuration 
 
@@ -88,8 +101,8 @@ RUN cp -r /app/ExpressionEngine/www/* /var/www/html/.
 Adding xdebug.ini as specified above with the following configuration: 
 
 ```dosini
-zend_extension=xdebug
 
+zend_extension=xdebug
 [xdebug]
 xdebug.mode=develop,debug
 #xdebug.discover_client_host=1
@@ -103,4 +116,30 @@ xdebug.connect_timeout_ms=2000
 
 ### Running the application and testing our theories
 
-Now I deployed the application with remote debugging on, it should be connecting back to our host machine on VScode. 
+Now I deployed the application with remote debugging on, it should be connecting back to our host machine on VSCode. We can simply test it by setting a breakpoint at the sink we would like to hit which should be in the following line 
+
+```php 
+
+$viewtype_prefs = unserialize(ee()->input->cookie('viewtype'));
+
+```
+
+We can see that our breakpoint was hit by sending the following request: 
+
+```HTTP
+
+GET /admin.php?/cp/addons/settings/filepicker HTTP/1.1
+Host: localhost:30001
+User-Agent: [Redacted]
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Purpose: prefetch
+Accept-Encoding: gzip, deflate
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: exp_last_visit=1671913623; exp_last_activity=1671968630; **exp_viewtype=a%3A1%3A%7Bs%3A3%3A%22all%22%3Bs%3A4%3A%22list%22%3B%7D**; exp_tracker=%7B%220%22%3A%22index%22%2C%22token%22%3A%223f92644cb590bcfc68dab723c0211297faea6108e6c788b23da23ff45100808e41675301e75d960c6ac60df9021f5acc%22%7D; exp_csrf_token=fe3239026bae4959dfe79f2701e87d181d9d4a07; exp_sessionid=2684f59ade507f3ee6f45f6eef4eeff6edd686d8
+Connection: close
+```
+
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/4347574/226135806-63f93804-de65-4995-895f-c7d161ed74ce.png">
+
+### From PHP Object injection to authenticated RCE: 
+
