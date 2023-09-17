@@ -3,6 +3,9 @@ title: SysAid On-Premise 20.1.11 - Unauthenticated RCE
 date: 2020-05-22 13:33:37 +/-TTTT
 categories: [cve-2020-10569]
 tags: [ghostcat,cve-2020-10569]     # TAG names should always be lowercase
+image:
+  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/8eaea6b1-3342-4895-a4ec-8f6ee77afe16
+  show_in_post: true
 ---
 
 ## Introduction
