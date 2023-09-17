@@ -4,7 +4,7 @@ date: 2020-05-22 13:33:37 +/-TTTT
 categories: [cve-2020-10569]
 tags: [ghostcat,cve-2020-10569]     # TAG names should always be lowercase
 image:
-  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/87d1e759-a5f6-4525-8f0d-8d471771de91
+  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/630813d9-7d2e-4e67-9946-02ddff5bef7e
   show_in_post: true
 ---
 
