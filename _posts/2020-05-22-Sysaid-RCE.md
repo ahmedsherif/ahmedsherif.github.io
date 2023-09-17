@@ -78,7 +78,8 @@ That will be the same case in this application, but we need to know what is the 
 
 2. Now, the interpretation of the file should be easy, as we will use the AJP connector to interpret the path of `WEB-INF\temp\sysaidtemp_[random].data` instead of `web.xml` file. 
 
-![image](https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/4d834f10-0db0-46a2-b690-034d5004258b)
+<img width="1247" alt="image" src="https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/734af1e2-c8a7-42d2-a718-7cd5b4188cdb">
+
 
 
 
