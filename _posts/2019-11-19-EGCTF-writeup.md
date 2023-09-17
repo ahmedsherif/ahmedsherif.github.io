@@ -4,7 +4,7 @@ date: 2019-11-18 13:33:37 +/-TTTT
 categories: [ctf,egctf]
 tags: [ctf,egctf]     # TAG names should always be lowercase
 image:
-  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/8c9a6c89-8bbc-45e7-94d8-e2bd66a1781e
+  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/407502cd-f681-467b-9945-66c2cd44a167
   show_in_post: true
 ---
 
