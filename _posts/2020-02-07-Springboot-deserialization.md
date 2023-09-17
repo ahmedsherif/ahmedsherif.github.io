@@ -4,7 +4,7 @@ date: 2020-02-06 13:33:37 +/-TTTT
 categories: [java-deserialization,springboot]
 tags: [java-deserialization,springboot]     # TAG names should always be lowercase
 image:
-  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/f709fb34-39eb-422e-84dc-2812d1f8807b
+  path: https://github.com/ahmedsherif/ahmedsherif.github.io/assets/4347574/a5df0248-12a4-40c4-8fbb-eed887bdc49f
   show_in_post: true
 ---
 
