@@ -12,3 +12,6 @@ image:
 # From Code Code Analysis to RCE
 
 ![!\[Desktop View\](/assets/img/posts/1/cover.jpeg){: width="972" height="589" }](../assets/img/posts/1/cover.jpeg)
+
+![Desktop View](/assets/img/posts/1/cover.jpeg){: width="972" height="589" }(/assets/img/posts/1/cover.jpeg)
+![Desktop View](../assets/img/posts/1/cover.jpeg){: width="972" height="589" }(../assets/img/posts/1/cover.jpeg)
