@@ -4,9 +4,11 @@ date: 2024-03-20 13:33:37 +/-TTTT
 categories: [codereview]
 tags: [codereview]     # TAG names should always be lowercase
 image:
-  path: /assets/img/posts/1/cover.jpeg
+  path: {{site.url}}/assets/img/posts/1/cover.jpeg
   show_in_post: true
 ---
 
 
 # From Code Code Analysis to RCE
+
+![Desktop View](/assets/img/posts/1/cover.jpeg){: width="972" height="589" }
