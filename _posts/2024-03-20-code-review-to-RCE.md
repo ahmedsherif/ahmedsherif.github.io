@@ -9,6 +9,26 @@ image:
 ---
 
 
-# From Code Code Analysis to RCE
+## TL;DR: 
 
-![alt text](https://ahmedsherif.github.io/assets/img/posts/1/cover.jpeg)
+In this article, I detail my journey of uncovering CVE-2023-22953 through a meticulous source code review process. I explain the steps involved, including taint analysis, manual code review, runtime debugging, and flow analysis. By following these methods, readers can gain insights into identifying and addressing vulnerabilities within their own codebase effectively.
+
+## Index
+
+- Introduction
+- Data flow analysis
+  - source & sink concept
+- Understanding the code
+  - manual code review
+  - automated code review
+    - SARIF format (SARIF viewer / explorer)
+- Spotting the vulnerability
+  - Runtime debugging
+    - Setting up the environment
+    - Verifying the vulnerability
+- PHP Insecure deserialization 
+  - Exploitation deserialization
+  - ROP vs POP 
+  - Custom gadget chain
+  - **Final Exploit**
+
