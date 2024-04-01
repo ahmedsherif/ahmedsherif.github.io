@@ -4,11 +4,11 @@ date: 2024-03-20 13:33:37 +/-TTTT
 categories: [codereview]
 tags: [codereview]     # TAG names should always be lowercase
 image:
-  path: ![{{site.url}}/assets/img/posts/1/cover.jpeg](../assets/img/posts/1/cover.jpeg)
+  path: https://ahmedsherif.github.io/assets/img/posts/1/cover.jpeg
   show_in_post: true
 ---
 
 
 # From Code Code Analysis to RCE
 
-![alt text](../assets/img/posts/1/cover.jpeg)
+![alt text](https://ahmedsherif.github.io/assets/img/posts/1/cover.jpeg)
