@@ -20,7 +20,7 @@ timezone: Europe/Amsterdam
 
 title: Ahmed Sherif # the main title
 
-tagline: Offensive Security Expert.. # it will display as the sub-title
+tagline: Offensive Security / Red Team.. # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   this blog is dedicated to the exciting world of red teaming, offensive security, security research, and security code review. I like to share my insights and experiences on the latest tools, techniques, and trends in cybersecurity. Stay informed and stay ahead of the game with our regular updates and insights.
@@ -32,7 +32,7 @@ github:
   username: ahmedsherif # change to your github username
 
 twitter:
-  username: sherif_ninja # change to your twitter username
+  username: https://www.linkedin.com/in/ahmedsherif # change to your twitter username
 
 social:
   # Change to your full name.
@@ -41,7 +41,7 @@ social:
   email: N/A # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/sherif_ninja # change to your twitter homepage
+    - https://www.linkedin.com/in/ahmedsherif # change to your twitter homepage
     - https://github.com/ahmedsherif # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
@@ -70,17 +70,17 @@ google_analytics:
 #     light  - Use the light color scheme
 #     dark   - Use the dark color scheme
 #
-theme_mode:  dark
+theme_mode:  light
 
 # The CDN endpoint for images.
 # Notice that once it is assigned, the CDN url
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: "https://avatars.githubusercontent.com/u/4347574?s=400&u=b9dd260c708d23cc3072c6c02d66b438899aef48&v=4"
+img_cdn: "https://i.ibb.co/nsHhpL5/photo-2024-07-18-16-04-01.jpg"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "https://avatars.githubusercontent.com/u/4347574?s=400&u=b9dd260c708d23cc3072c6c02d66b438899aef48&v=4"
+avatar: "https://i.ibb.co/nsHhpL5/photo-2024-07-18-16-04-01.jpg"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
