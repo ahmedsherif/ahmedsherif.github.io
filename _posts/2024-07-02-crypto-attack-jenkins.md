@@ -1,5 +1,5 @@
 ---
-title: When US Export Restrictions Become an Advantage for Attackers (CVE-2024-23897)
+title: Chosen Plaintext Attack / The case of Jenkins and US export restrictions (CVE-2024-23897)
 date: 2024-07-02 13:33:37 +/-TTTT
 categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
@@ -8,15 +8,16 @@ image:
   show_in_post: true
 ---
 
-## TL;DR:
+## TL;DR
 
-You encountered a Jenkins instance vulnerable to CVE-2024-23897, which allows for arbitrary file read. Without credentials and with the /script endpoint inaccessible, You sought to leverage this vulnerability to gain further access through Jenkins.
+As a red teamer, you encountered a Jenkins instance that is vulnerable to CVE-2024-23897, which allowed for limited arbitrary file read. Without credentials and with the /script endpoint inaccessible, you sought to leverage this vulnerability by revealing Hudson to decypt the credentials.
 
 ## What is CVE-2024-23897?
 
->CVE-2024-23897 is a critical vulnerability in Jenkins that allows attackers to read arbitrary files on the Jenkins server, potentially leading to remote code execution (RCE). This vulnerability originates from the args4j library, which automatically expands file contents into command arguments when an argument begins with the "@" character.
+>CVE-2024-23897 is a critical vulnerability in Jenkins that enables attackers to read arbitrary files on the Jenkins server, potentially leading to remote code execution. This vulnerability stems from the args4j library, which automatically expands file contents into command arguments when an argument starts with the "@" character. 
 
-While online resources commonly state that this vulnerability can result in RCE, they often do not elucidate the specific conditions under which this escalation can occur.
+Although online resources often suggest this vulnerability can result in remote code execution, they frequently fail to explain the specific technical details and POC required for this escalation.
+
 
 ### RCE Conditions:
 
@@ -49,16 +50,14 @@ There are several available POCs and the best one I tried so far was [this one](
 git clone https://github.com/xaitax/CVE-2024-23897.git
 ```
 
-![Reading /etc/passwd](https://ahmedsherif.github.io/assets/img/posts/2/Exploit-etc-passwd.png)
 
-Since we are unauthenticated users, we are only allowed to read 3 lines of any file based on the following commands
+As unauthenticated users, we are limited to reading only the first three lines of any file through the provided commands.
 
 - `who-am-i`: reads the first line. 
 - `enable-job`: reads second line. 
 - `help`: reads the 3rd line. 
 
-You can also execute it directly from jenkins-cli.jar that can be found in the following URL: `http://target/jnlpJars/jenkins-cli.jar`. 
-
+It can also be executed directly using the `jenkins-cli.jar` file, which can be downloaded from the URL `http://target/jnlpJars/jenkins-cli.jar`. For example:
 ```bash
 java -jar jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/etc/passwd' 2>&1
 
@@ -68,24 +67,23 @@ Reports your credential and permissions.
 
 ```
 
-> During the actual assessment most likely the target needs to be accessed through tunneling (i.e. proxychains), in which `jenkins-cli.jar` will not work through but the python script. still `proxifier` can solve this on a windows machine. 
+> During the actual red team, the target will most likely need to be accessed through tunneling (Proxychains), in which the `jenkins-cli.jar` tool may not go through, but the Python script can be utilized. In such cases, a tool like Proxifier can be employed on a Windows machine to overcome this challenge.
 {: .prompt-warning }
 
+## Reading files
 
-## Enumeration!
+Given the limited lines we can access due to the authentication, we must identify files of interest that may partially assist us.
 
-Given the limitations on the files we can read, we need to identify files of interest that may partially assist us.
-
-#### Notable Files:
+#### The key files that can be tested include:
 - `/proc/self/environ`
 - `/proc/self/cmdline`
-- `${JENKINS_HOME}/credentials.xml` (Jenkins home can be found in `/proc/self`)
+- `${JENKINS_HOME}/credentials.xml` (Jenkins home can be found in `/proc/self/*`)
 - `${JENKINS_HOME}/secrets/master.key`
 - `${JENKINS_HOME}/secrets/initialAdminPassword`
 
-Unfortunately, even if all the above files, including `master.key`, are obtained, they will not be sufficient.
+Even if an attacker can access all the aforementioned files, including the `master.key`, these assets alone would not be sufficient to decrypt the credentials.
 
-Analyzing how Jenkins encrypts and decrypts credentials, as demonstrated in [this script](https://github.com/tweksteen/jenkins-decrypt/blob/master/decrypt.py), reveals that three components are required:
+The analysis of how Jenkins encrypts and decrypts credentials, as demonstrated in [this script](https://github.com/tweksteen/jenkins-decrypt/blob/master/decrypt.py), reveals that three components are required:
 
 - `master.key`
 - `hudson.util.Secret` (binary file)
@@ -98,7 +96,7 @@ TBD How Jenkins do encryption and Decryption
 In the context of binary data retrieval, the absence of `hudson.util.Secret` presents a significant challenge. Attempts to retrieve it using the exploit mentioned above will fail, accompanied by the following error:
 
 ```python
-❌ http://sherif.com:9091 not reachable: 'utf-8' codec can't decode byte 0xc6 in position 10: invalid continuation byte
+http://sherif.com:9091 not reachable: 'utf-8' codec can't decode byte 0xc6 in position 10: invalid continuation byte
 ```
 
 This issue arises due to the presence of non-printable characters. However, modifying line 80 as follows resolves this:
@@ -115,36 +113,42 @@ A Wireshark analysis was conducted to examine the retrieval of binary files. Not
 
 ![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.png)
 
-> This was only the case on the testing environment, will explain more below
+> This was only the case on the testing environment.
 {: .prompt-danger}
 ## EFBFBD and UTF-8 conversion (�)
 
 
 EF BF BD (in hex), which is the utf-8 encoding of the Unicode character U+FFFD [Replacement characters](https://www.fileformat.info/info/unicode/char/0fffd/index.htm).When decoding sequences of bytes into Unicode characters, a program may encounter a group bytes that is invalid (i.e. it does not correspond to a Unicode character). In such cases, the program has three choices: it can stop decoding and raise an error, silently skip over the invalid group of bytes, or translate the group of bytes into a special marker. This latter scheme allows most of the text to be read, but still leaves an indication that something went wrong.
 
-coming across the blog of [errno](https://www.errno.fr/bruteforcing_CVE-2024-23897.html), it was an amazing inspiration for me. Errno had a new finding which is related to the US export restrictions, this simply means that the keys are only `128 bits / 16 bytes`. 
+coming across the blog of [errno](https://www.errno.fr/bruteforcing_CVE-2024-23897.html), it was an amazing inspiration for me. Errno explained the UTF-8 and `EFBFBD` replacement character to brute force and wrote a nice code in rust to crack it. 
+
+## Crack Me If You Can: Thanks to Uncle Sam's Export Rules!
+As previously mentioned, the vulnerability is limited by the ability to read only a few lines of the key, making it challenging to crack. However, Errno made a new discovery: due to US export restrictions, the keys are limited to just `128 bits`, or `16 bytes`. 
 
 ![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.png)
 
-## Game Over, right? 
+This implies that, to achieve successful decryption, it is sufficient to read only the first `16 bytes` of the Hudson file, even if only the initial few lines are accessible.
 
-Now after reading the code and blogpost of Errno and understanding the replacement characters, we are good to go and I was excited to start cracking the Hudson and confidentiality key. But Unfortunately that was not the case! 
+## Events often unfold contrary to our desires
 
-Looking at the first 16 bytes in my case, clearly I can see no `EFBFBD` replacement character: 
+Having thoroughly reviewed the Errno code and blog post, and comprehending the concept of replacement characters, I was eager to begin deciphering the Hudson and confidentiality keys. Unfortunately, this anticipation was met with disappointment.
+
+Upon examining the initial 16 bytes in my case, it was evident that the `EFBFBD` replacement character was absent.
 
 ![Jenkins-hex-hudson](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-hex-hudson.png)
 
 
-> The above output is from exploiting the arbitrary file read, we can read the hudson bytes directly assuming the first bytes starts after `3a20`. The first 32 bytes are output from Jenkins-cli itself and irrelevant.
+> The actual bytes of Hudson file starts after `3a20`. The first 32 bytes are output from Jenkins-cli itself and irrelevant.
 {: .prompt-tip }
 
-You can achieve this by command line 
+In order to avoid confusion between the bytes of `Hudson` file itself and `jenkins-cli` error, you can apply the below one-liner:
+
 ```bash
 cat hudson.bin | tail -c +33 | head -c +16 | xxd
 ```
 ![hex-hudson-read-16bytes](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-reading-Hudson-16bytes.png)
 
-### Repeated byte
+### Byte patterns
 
 Well, since we lost hope in our case for finding the replacement characters `EFBFBD`, we could actually assume that the hudson file did not have non-printable characters and is correct, but that was not the case since we could not decrypt our credentials with it. 
 

@@ -15,8 +15,9 @@ I've had the opportunity to build and lead offensive security operations for var
 - **Penetration Testing and Code Reviews**: Skilled in identifying and hunting vulnerabilities through thorough testing and code analysis.
 - **Building / Rebranding Offensive Security Operations**: Experienced in establishing and enhancing offensive security teams and processes.
 - **Writing Process Controls**: Adept at developing and implementing security controls and processes for red teaming and SSDLC.
+- **Vendor Management and Procurement**: Selecting, negotiating with, and managing relationships with vendors to procure the best tools and services for offensive security operations.
 
-## Publications
+## Publications & Talks
 
 - **CVE-2016-5661 and CVE-2016-5660**: Unauthorized file upload - Accela Civic Platform Citizen Access
 - **CVE-2020-10569**: Remote command execution via AJP - SysAid help desk
