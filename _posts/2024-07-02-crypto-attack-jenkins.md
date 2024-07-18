@@ -18,7 +18,7 @@ You encountered a Jenkins instance vulnerable to CVE-2024-23897, which allows fo
 
 While online resources commonly state that this vulnerability can result in RCE, they often do not elucidate the specific conditions under which this escalation can occur.
 
-###RCE Conditions:
+### RCE Conditions:
 
 1. **Resource Root URL:**
    - The "Resource Root URL" functionality is enabled.
@@ -49,7 +49,7 @@ There are several available POCs and the best one I tried so far was [this one](
 git clone https://github.com/xaitax/CVE-2024-23897.git
 ```
 
-![Reading /etc/passwd](https://ahmedsherif.github.io/assets/img/posts/2/Exploit-etc-passwd.jpg)
+![Reading /etc/passwd](https://ahmedsherif.github.io/assets/img/posts/2/Exploit-etc-passwd.png)
 
 Since we are unauthenticated users, we are only allowed to read 3 lines of any file based on the following commands
 
