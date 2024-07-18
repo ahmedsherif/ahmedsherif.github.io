@@ -12,7 +12,7 @@ I've had the opportunity to build and lead offensive security operations for var
 
 - **Red Teaming / Adversary Emulations**: Expert in simulating advanced threat actors to assess and improve organizational defenses.
 - **Leadership / Mentorship**: Proven ability to lead and mentor teams, fostering growth and innovation in offensive security.
-- **Penetration Testing and Code Reviews**: Skilled in identifying and mitigating vulnerabilities through thorough testing and analysis.
+- **Penetration Testing and Code Reviews**: Skilled in identifying and hunting vulnerabilities through thorough testing and code analysis.
 - **Building / Rebranding Offensive Security Operations**: Experienced in establishing and enhancing offensive security teams and processes.
 - **Writing Process Controls**: Adept at developing and implementing security controls and processes for red teaming and SSDLC.
 

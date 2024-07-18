@@ -37,7 +37,7 @@ While online resources commonly state that this vulnerability can result in RCE,
 In our case, none of the above conditions were met. Additionally, the advisory mentions limitations regarding reading binary files, as detailed below:
 
 ><span style="color:red">**Limitations for reading binary files**</span>
-![Jenkins Advisory Limitations of binary reading](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-advisory-binary.jpg)
+![Jenkins Advisory Limitations of binary reading](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-advisory-binary.png)
 
 [Reference](https://www.jenkins.io/security/advisory/2024-01-24/#SECURITY-3314)
 
@@ -113,7 +113,7 @@ This issue arises due to the presence of non-printable characters. However, modi
 A Wireshark analysis was conducted to examine the retrieval of binary files. Notably, the binary file begins after the byte sequence `643a20`, with a repetitive sequence of `EFBFBD` starting from the 4th byte.
 
 
-![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.jpg)
+![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.png)
 
 > This was only the case on the testing environment, will explain more below
 {: .prompt-danger}
@@ -124,7 +124,7 @@ EF BF BD (in hex), which is the utf-8 encoding of the Unicode character U+FFFD [
 
 coming across the blog of [errno](https://www.errno.fr/bruteforcing_CVE-2024-23897.html), it was an amazing inspiration for me. Errno had a new finding which is related to the US export restrictions, this simply means that the keys are only `128 bits / 16 bytes`. 
 
-![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.jpg)
+![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.png)
 
 ## Game Over, right? 
 
