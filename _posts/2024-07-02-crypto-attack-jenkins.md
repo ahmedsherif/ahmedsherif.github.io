@@ -89,6 +89,7 @@ The analysis of how Jenkins encrypts and decrypts credentials, as demonstrated i
 - `hudson.util.Secret` (binary file)
 - `encrypted credential` (e.g., `AQAAABAAAAAQmEZaw8Fv9tPlXWVQye1TR2KgF3p/wGoYs/TEQCmSxkk=`)
 
+
 TBD How Jenkins do encryption and Decryption
 
 ## Analyzing retrieval of binary data
@@ -128,6 +129,13 @@ As previously mentioned, the vulnerability is limited by the ability to read onl
 ![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.png)
 
 This implies that, to achieve successful decryption, it is sufficient to read only the first `16 bytes` of the Hudson file, even if only the initial few lines are accessible.
+
+## Chosen plaintext attack
+
+Now with given the encrypted credentials that are in credentials.xml file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the encrypted credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
+
+![CBC attack](https://ahmedsherif.github.io/assets/img/posts/2/cbc-attack.png)
+
 
 ## Events often unfold contrary to our desires
 
