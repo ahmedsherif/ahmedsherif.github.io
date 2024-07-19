@@ -4,7 +4,7 @@ date: 2024-03-20 13:33:37 +/-TTTT
 categories: [codereview]
 tags: [codereview]     # TAG names should always be lowercase
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/1/cover.png
+  path: https://ahmedsherif.github.io/assets/img/posts/code-analysis-cover.png
   show_in_post: true
 ---
 
