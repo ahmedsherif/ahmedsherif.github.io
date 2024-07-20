@@ -3,6 +3,7 @@ title: From Code Analysis to RCE (CVE-2023-22953)
 date: 2024-03-20 13:33:37 +/-TTTT
 categories: [codereview]
 tags: [codereview]     # TAG names should always be lowercase
+comments: true
 image:
   path: https://ahmedsherif.github.io/assets/img/posts/code-analysis-cover.png
   show_in_post: true

