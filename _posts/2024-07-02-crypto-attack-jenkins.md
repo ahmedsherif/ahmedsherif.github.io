@@ -5,11 +5,11 @@ categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
 comments: true
 image:
-  path: https://s2.ezgif.com/tmp/ezgif-2-f4dfe46c67.gif
+  path: https://ahmedsherif.github.io/posts/2/cover-jenkins.png
   show_in_post: true
 ---
 
-## TL;DR
+## TL;DR:
 
 As a red teamer, you encountered a Jenkins instance that is vulnerable to CVE-2024-23897, which allowed for limited arbitrary file read. Without credentials and with the /script endpoint inaccessible, you sought to leverage this vulnerability by revealing Hudson to decypt the credentials.
 
@@ -275,4 +275,4 @@ fn main() {
 }
 ```
 
-### Final thoughts 
+### Final thoughts
