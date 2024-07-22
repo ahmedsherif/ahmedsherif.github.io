@@ -5,7 +5,7 @@ categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
 comments: true
 image:
-  path: https://ahmedsherif.github.io/posts/2/cover-jenkins.png
+  path: https://ahmedsherif.github.io/assets/img/posts/2/cover-jenkins.png
   show_in_post: true
 ---
 
