@@ -5,7 +5,7 @@ categories: [codereview]
 tags: [codereview]     # TAG names should always be lowercase
 comments: true
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/code-analysis-cover.png
+  path: https://ahmedsherif.github.io/assets/img/posts/cover-code-analysis.gif
   show_in_post: true
 ---
 
