@@ -283,6 +283,9 @@ fn main() {
 
 ### Cracking in action 
 
+```liquid
+{% include embed/video.html src='https://ahmedsherif.github.io/assets/img/posts/2/jenkins-demo.mp4' %}
+```
 
 ### Performance 
 
