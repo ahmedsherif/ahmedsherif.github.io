@@ -283,7 +283,7 @@ fn main() {
 
 ### Cracking in action / Demo
 
-{% include embed/video.html src="/assets/img/posts/2/jenkins-demo.mp4" muted = true title = "Demo" poster = "thumbnails/IMG_0695.jpeg"%}
+{% include embed/video.html src="assets/img/posts/2/jenkins-demo.mp4" muted = true title = "Demo" poster = "assets/img/posts/2/cover-jenkins.png" %}
 
 {%
   include embed/video.html
