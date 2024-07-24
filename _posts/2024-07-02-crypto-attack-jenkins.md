@@ -133,7 +133,7 @@ This implies that, to achieve successful decryption, it is sufficient to read on
 
 ## Chosen plaintext attack
 
-Now with given the encrypted credentials that are in credentials.xml file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the encrypted credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
+Now with given the encrypted credentials that are in `credentials.xml` file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the encrypted credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
 
 ![CBC attack](https://ahmedsherif.github.io/assets/img/posts/2/cbc-attack.png)
 
@@ -165,7 +165,7 @@ I couldn't find the replacement bytes `EFBFBD`, which might mean the Hudson bina
 
 Considering a different encoding might change the replacement bytes, I wondered if it was a sequence or just one byte.
 
-I set up several Jenkins instances with different environments, reading the binary files to spot patterns. I suspected the replacement byte could be a single byte.
+I set up several Jenkins instances with different environments and encoding, reading the binary files to spot patterns. I suspected the replacement byte could be a single byte.
 
 Using this one-liner, I checked for the most repeated byte, identifying `0x3f` as a potential replacement byte
 
@@ -176,7 +176,13 @@ dd if=hudson.bin bs=1 skip=32 count=16 2>/dev/null | xxd -p | fold -w2 | sort | 
 ![Hudson-Repeated-byte](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-repeated-byte.png)
 
 
-Of course, I was not sure if this approach will work or not but that was the next logical step for me. 
+Looking at several encoding we can have an overview of how replacement characters byte look like in below table: 
+
+| Encoding   | Replacement Byte(s) |
+| `UTF-8`  | `EF BF BD`  |
+|`UTF-16`   | `00FD` Big Endian / `FD00` Little Endian   |
+|`UTF-32` | `0000FFD` Big Endian / `FDFF0000` Little Endian |
+|`ISO-8859-1` (Latin-1) | `3f` |
 
 ## Analyzing encrypted file, get IV and Ciphertext
 
@@ -208,6 +214,7 @@ echo -n $1 | base64 -d | tail -c +10 | head -c +16 | xxd -p | sed 's/../0x&,/g'
 echo -n $1 | base64 -d | tail -c +26 | xxd -p | sed 's/../0x&,/g'
 ```
 The first output is for the IV, second for the ciphertext.
+
 **Start brute forcing** 
 
 I'll be using the same rust code that was developed by Guillaume with slight modification of checking only printable characters and also check if the first 5 bytes of decrypted text are `-----` which is the start of the private ssh key. 
@@ -275,4 +282,10 @@ fn main() {
 }
 ```
 
+### Cracking in action 
+
 ### Final thoughts
+
+- Missing bytes can vary; sometimes it's less than 6 bytes, other times up to 9 bytes.
+- Encoding can significantly impact the outcome, so be aware of potential encoding issues.
+- Be cautious with vulnerability advisories; they can be misleading.

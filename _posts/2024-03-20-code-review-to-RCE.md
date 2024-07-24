@@ -32,4 +32,3 @@ In this article, I detail my journey of discovering CVE-2023-22953 through a sou
   - ROP vs POP 
   - Custom gadget chain
   - **Final Exploit**
-
