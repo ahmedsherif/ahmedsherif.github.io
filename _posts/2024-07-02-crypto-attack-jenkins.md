@@ -91,7 +91,6 @@ The analysis of how Jenkins encrypts and decrypts credentials, as demonstrated i
 - `encrypted credential` (e.g., `AQAAABAAAAAQmEZaw8Fv9tPlXWVQye1TR2KgF3p/wGoYs/TEQCmSxkk=`)
 
 
-TBD How Jenkins do encryption and Decryption
 
 ## Analyzing retrieval of binary data
 
@@ -283,6 +282,14 @@ fn main() {
 ```
 
 ### Cracking in action 
+
+
+### Performance 
+
+I executed the script on Macbook M1 Pro, The number of bytes were 5 and it took around 18:29 minutes. 
+
+![cracking time](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-cracking-time.png)
+
 
 ### Final thoughts
 
