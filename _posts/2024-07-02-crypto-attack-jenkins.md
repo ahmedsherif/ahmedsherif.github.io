@@ -1,5 +1,5 @@
 ---
-title: Chosen Plaintext Attack / The case of Jenkins and US export restrictions (CVE-2024-23897)
+title: From Limited file read to full access on Jenkins (CVE-2024-23897)
 date: 2024-07-02 13:33:37 +/-TTTT
 categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
@@ -130,9 +130,9 @@ As previously mentioned, the vulnerability is limited by the ability to read onl
 
 This implies that, to achieve successful decryption, it is sufficient to read only the first `16 bytes` of the Hudson file, even if only the initial few lines are accessible.
 
-## Chosen plaintext attack
+## Recorving the key based on known plaintext
 
-Now with given the encrypted credentials that are in `credentials.xml` file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the encrypted credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
+Now with given the encrypted credentials that are in `credentials.xml` file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the plaintext credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
 
 ![CBC attack](https://xphantom.nl/assets/img/posts/2/cbc-attack.png)
 
