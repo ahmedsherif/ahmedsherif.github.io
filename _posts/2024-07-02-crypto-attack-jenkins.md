@@ -296,7 +296,7 @@ fn main() {
 
 ### Performance 
 
-I executed the script on Macbook M1 Pro, The number of bytes were 5 and it took around 18:29 minutes. 
+I executed the script on Macbook M1 Pro, The number of bytes were 5 and it took roughly from 9:28 to 18:29 minutes. 
 
 ![cracking time](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-cracking-time.png)
 
