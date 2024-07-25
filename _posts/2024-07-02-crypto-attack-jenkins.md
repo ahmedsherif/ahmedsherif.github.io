@@ -5,7 +5,7 @@ categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
 comments: true
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/2/cover-jenkins.png
+  path: /assets/img/posts/2/cover-jenkins.png
   show_in_post: true
 ---
 
@@ -286,7 +286,7 @@ fn main() {
 
 {%
   include embed/video.html
-  src='https://ahmedsherif.github.io/assets/img/posts/2/jenkins-demo.mp4'
+  src='/assets/img/posts/2/jenkins-demo.mp4'
   types='ogg|mov'
   title='Demo video'
   autoplay=true
