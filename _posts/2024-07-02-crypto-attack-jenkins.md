@@ -286,7 +286,7 @@ fn main() {
 
 {%
   include embed/video.html
-  src='/assets/img/posts/2/jenkins-demo.mp4'
+  src='https://xphantom.nl/assets/img/posts/2/jenkins-demo.mp4'
   types='ogg|mov'
   title='Demo video'
   autoplay=true
