@@ -4,7 +4,7 @@ date: 2020-02-25 13:33:37 +/-TTTT
 categories: [ctf,ctf-deployment]
 tags: [ctf,ctf-deployment]     # TAG names should always be lowercase
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/ctf-cover.png
+  path: https://xphantom.nl/assets/img/posts/ctf-cover.png
   show_in_post: true
 ---
 

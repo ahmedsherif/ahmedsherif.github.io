@@ -5,7 +5,7 @@ categories: [crypto]
 tags: [crypto,jenkins,hudson]     # TAG names should always be lowercase
 comments: true
 image:
-  path: /assets/img/posts/2/cover-jenkins.png
+  path: https://xphantom.nl/assets/img/posts/2/cover-jenkins.png
   show_in_post: true
 ---
 
@@ -39,7 +39,7 @@ Although online resources often suggest this vulnerability can result in remote 
 In our case, none of the above conditions were met. Additionally, the advisory mentions limitations regarding reading binary files, as detailed below:
 
 ><span style="color:red">**Limitations for reading binary files**</span>
-![Jenkins Advisory Limitations of binary reading](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-advisory-binary.png)
+![Jenkins Advisory Limitations of binary reading](https://xphantom.nl/assets/img/posts/2/jenkins-advisory-binary.png)
 
 [Reference](https://www.jenkins.io/security/advisory/2024-01-24/#SECURITY-3314)
 
@@ -112,7 +112,7 @@ This issue arises due to the presence of non-printable characters. However, modi
 A Wireshark analysis was conducted to examine the retrieval of binary files. Notably, the binary file begins after the byte sequence `643a20`, with a repetitive sequence of `EFBFBD` starting from the 4th byte.
 
 
-![wireshark-analysis](https://ahmedsherif.github.io/assets/img/posts/2/wireshark-dump.png){: .shadow }
+![wireshark-analysis](https://xphantom.nl/assets/img/posts/2/wireshark-dump.png){: .shadow }
 
 > This was only the case on the testing environment.
 {: .prompt-danger}
@@ -126,7 +126,7 @@ coming across the blog of [Guillaume](https://www.errno.fr/bruteforcing_CVE-2024
 ## Crack Me If You Can: Thanks to Uncle Sam's Export Rules!
 As previously mentioned, the vulnerability is limited by the ability to read only a few lines of the key, making it challenging to crack. However, Guillaume made a new discovery: due to US export restrictions, the keys are limited to just `128 bits`, or `16 bytes`. 
 
-![US export keys](https://ahmedsherif.github.io/assets/img/posts/2/export-keys-jenkins.png)
+![US export keys](https://xphantom.nl/assets/img/posts/2/export-keys-jenkins.png)
 
 This implies that, to achieve successful decryption, it is sufficient to read only the first `16 bytes` of the Hudson file, even if only the initial few lines are accessible.
 
@@ -134,7 +134,7 @@ This implies that, to achieve successful decryption, it is sufficient to read on
 
 Now with given the encrypted credentials that are in `credentials.xml` file, or you could obtain via build-log history in case you managed to steal cookie from a limited-access user during a red team and still have no access to `/script` due to the lack of `overall permissions` we could know part of the encrypted credentials, for example if it is a private key usually it starts with `-----BEGIN OPENSSH PRIVATE KEY-----` and since we are targeting the first 16 bytes, it should be working as follow: 
 
-![CBC attack](https://ahmedsherif.github.io/assets/img/posts/2/cbc-attack.png)
+![CBC attack](https://xphantom.nl/assets/img/posts/2/cbc-attack.png)
 
 
 ## The wind does not blow as the ships desire
@@ -143,7 +143,7 @@ Having thoroughly reviewed the Guillaume code and blog post, and comprehending t
 
 Upon examining the initial 16 bytes in my case, it was evident that the `EFBFBD` replacement character was absent.
 
-![Jenkins-hex-hudson](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-hex-hudson.png)
+![Jenkins-hex-hudson](https://xphantom.nl/assets/img/posts/2/Jenkins-hex-hudson.png)
 
 
 
@@ -155,7 +155,7 @@ In order to avoid confusion between the bytes of `Hudson` file itself and `jenki
 ```bash
 cat hudson.bin | tail -c +33 | head -c +16 | xxd
 ```
-![hex-hudson-read-16bytes](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-reading-Hudson-16bytes.png)
+![hex-hudson-read-16bytes](https://xphantom.nl/assets/img/posts/2/Jenkins-reading-Hudson-16bytes.png)
 
 
 ### Byte patterns
@@ -172,7 +172,7 @@ Using this one-liner, I checked for the most repeated byte, identifying `0x3f` a
 dd if=hudson.bin bs=1 skip=32 count=16 2>/dev/null | xxd -p | fold -w2 | sort | uniq -c | sort -nr | head -n 1
 ```
 
-![Hudson-Repeated-byte](https://ahmedsherif.github.io/assets/img/posts/2/Jenkins-repeated-byte.png)
+![Hudson-Repeated-byte](https://xphantom.nl/assets/img/posts/2/Jenkins-repeated-byte.png)
 
 
 Looking at several encoding we can have an overview of how replacement characters byte look like in below table: 
@@ -187,7 +187,7 @@ Looking at several encoding we can have an overview of how replacement character
 
 Additionally based on the above testing, we need to analyze the cipher text and extract the IV and 16 bytes of the cipher. It was noticed that the file has a header, then IV, and then the ciphertext. 
 
-![Ciphertext-analysis](https://ahmedsherif.github.io/assets/img/posts/2/ciphertext.png)
+![Ciphertext-analysis](https://xphantom.nl/assets/img/posts/2/ciphertext.png)
 
 The IV starts usually after the header from the `10th` byte. 
 
@@ -298,7 +298,7 @@ fn main() {
 
 I executed the script on Macbook M1 Pro, The number of bytes were 5 and it took roughly from 9:28 to 18:29 minutes. 
 
-![cracking time](https://ahmedsherif.github.io/assets/img/posts/2/jenkins-cracking-time.png)
+![cracking time](https://xphantom.nl/assets/img/posts/2/jenkins-cracking-time.png)
 
 
 ### Final thoughts

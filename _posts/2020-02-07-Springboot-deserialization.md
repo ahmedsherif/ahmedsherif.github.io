@@ -4,7 +4,7 @@ date: 2020-02-06 13:33:37 +/-TTTT
 categories: [java-deserialization,springboot]
 tags: [java-deserialization,springboot]     # TAG names should always be lowercase
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/cover-deserialize.png
+  path: https://xphantom.nl/assets/img/posts/cover-deserialize.png
   show_in_post: true
 ---
 

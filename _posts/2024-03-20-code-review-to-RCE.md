@@ -5,7 +5,7 @@ categories: [codereview]
 tags: [codereview,rce,expressionengine]     # TAG names should always be lowercase
 comments: true
 image:
-  path: https://ahmedsherif.github.io/assets/img/posts/cover-code-analysis.gif
+  path: https://xphantom.nl/assets/img/posts/cover-code-analysis.gif
   show_in_post: true
 ---
 
