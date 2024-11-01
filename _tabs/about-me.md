@@ -22,6 +22,7 @@ I've had the opportunity to build and lead offensive security operations for var
 - **CVE-2016-5661 and CVE-2016-5660**: Unauthorized file upload - Accela Civic Platform Citizen Access
 - **CVE-2020-10569**: Remote command execution via AJP - SysAid help desk
 - **CVE-2023-22953**: Remote Command Execution via deserialization - ExpressionEngine CMS
+- **CVE-2024-48200**: Local privilege escalation (LPE) on MobaXterm V24.2
 - **Building-up red team operation in complex environment**: Bsides Vienna - 2019 🇦🇹
 - **Simulating attacks on critical infrastructure**: 4SICS Sweden - 2015  🇸🇪
 - **Red Teaming on MacOS**: OWASP Netherlands - 2024 🇳🇱
