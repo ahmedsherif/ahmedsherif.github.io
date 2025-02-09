@@ -95,4 +95,4 @@ That will be the same case in this application, but we need to know what is the 
 
 - 5th of April 2020 - Reported both unauthenticated file upload and GhostCatcat attack. 
 - 7th of April 2020 - Recieved confirmation from SysAid and fix will be released the next version
-- 5th of May 2020 - Sysaid fixed both vulnerabilites and assigned CVE-2020-10569 for it. 
+- 5th of May 2020 - Sysaid fixed both vulnerabilites and assigned CVE-2020-10569 for it
