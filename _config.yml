@@ -1,7 +1,7 @@
 # The Site Configuration
 
 # Import the theme
-#theme: jekyll-theme-chirpy
+theme: jekyll-theme-chirpy
 
 # Change the following value to '/PROJECT_NAME' ONLY IF your site type is GitHub Pages Project sites
 # and doesn't have a custom domain.
@@ -121,7 +121,6 @@ paginate: 10
 # ------------ The following options are not recommended to be modified ------------------
 
 kramdown:
-  footnote_backlink: "&#8617;&#xfe0e;"
   syntax_highlighter: rouge
   syntax_highlighter_opts: # Rouge Options › https://github.com/jneen/rouge#full-options
     css_class: highlight
