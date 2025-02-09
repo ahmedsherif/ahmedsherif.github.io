@@ -477,10 +477,10 @@ You can add whatever mailboxes of the users
 The same as previous steps, thanks to aleemladha and his roles of Wazuh. You can find the roles of Wazuh details here: 
 
 **SERVER**
-[https://github.com/aleemladha/wazuh_server_install]()
+[https://github.com/aleemladha/wazuh_server_install](https://github.com/aleemladha/wazuh_server_install)
 
 **AGENT**
-[https://github.com/aleemladha/ludus_wazuh_agent]()
+[https://github.com/aleemladha/ludus_wazuh_agent](https://github.com/aleemladha/ludus_wazuh_agent)
 
 In my case, I decided to install the Wazuh Server on the `Kali` machine as I did not want to deploy a new Debian or Ubuntu. Feel free to deploy it based on your own preference. 
 
@@ -584,7 +584,7 @@ to disconnect:
 ```sudo wg-quick down homelab```
 - **On Windows / MacOS**
 
-You can download the Wireguard app from here: [https://www.wireguard.com/install/]()
+You can download the Wireguard app from here: [https://www.wireguard.com/install/](https://www.wireguard.com/install/)
 
 Once Installed, you can click on `Import tunnel` and select the `homelab.conf` file. 
 
@@ -626,11 +626,11 @@ Overall, I’m really happy with how everything turned out, and I hope this post
 
 
 ## References: 
-- [https://docs.ludus.cloud/]()
-- [https://github.com/Croko-fr/ludus-templates?tab=readme-ov-file]()
-- [https://github.com/ChoiSG/ludus_ansible_roles]()
-- [https://github.com/Primusinterp/ludus-ad-vulns]()
-- [https://github.com/jessefmoore/Ludus-Ranges/tree/main]()
+- [https://docs.ludus.cloud/](https://docs.ludus.cloud/)
+- [https://github.com/Croko-fr/ludus-templates?tab=readme-ov-file](https://github.com/Croko-fr/ludus-templates?tab=readme-ov-file)
+- [https://github.com/ChoiSG/ludus_ansible_roles](https://github.com/ChoiSG/ludus_ansible_roles)
+- [https://github.com/Primusinterp/ludus-ad-vulns](https://github.com/Primusinterp/ludus-ad-vulns)
+- [https://github.com/jessefmoore/Ludus-Ranges/tree/main](https://github.com/jessefmoore/Ludus-Ranges/tree/main)
 
 
 
