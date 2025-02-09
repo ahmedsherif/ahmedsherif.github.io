@@ -17,12 +17,25 @@ I've had the opportunity to build and lead offensive security operations for var
 - **Writing Process Controls**: Adept at developing and implementing security controls and processes for red teaming and SSDLC.
 - **Vendor Management and Procurement**: Selecting, negotiating with, and managing relationships with vendors to procure the best tools and services for offensive security operations.
 
-## Publications & Talks
 
-- **CVE-2016-5661 and CVE-2016-5660**: Unauthorized file upload - Accela Civic Platform Citizen Access
-- **CVE-2020-10569**: Remote command execution via AJP - SysAid help desk
-- **CVE-2023-22953**: Remote Command Execution via deserialization - ExpressionEngine CMS
+## Certifications & Trainings
+
+- Offensive Security Certified Professional **(OSCP)**
+- Offensive Security Web Expert **(OSWE)**
+- Certified Red Team Operator **(CRTO)**
+- Hack The Box Pro-Lab **(Offshore)**
+- Modern Initial Access and Evasion Tactics by mgeeky (@mariuszbit)
+- Offensive Azure AD and hybrid AD security by Dirk-Jan
+- Adversary Tactics - Red Teaming operations by SpecterOps
+- 210W - Cybersecurity for Industrial Control Systems
+by Homeland security
+
+
+## Publications & Talks
 - **CVE-2024-48200**: Local privilege escalation (LPE) on MobaXterm V24.2
+- **CVE-2023-22953**: Remote Command Execution via deserialization - ExpressionEngine CMS
+- **CVE-2020-10569**: Remote command execution via AJP - SysAid help desk
+- **CVE-2016-5661 and CVE-2016-5660**: Unauthorized file upload - Accela Civic Platform Citizen Access
 - **Building-up red team operation in complex environment**: Bsides Vienna - 2019 🇦🇹
 - **Simulating attacks on critical infrastructure**: 4SICS Sweden - 2015  🇸🇪
 - **Red Teaming on MacOS**: OWASP Netherlands - 2024 🇳🇱
