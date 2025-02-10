@@ -1,8 +1,8 @@
 ---
 title: Build Your Own Offensive Security Lab A Step-by-Step Guide with Ludus
 date: 2025-02-09 13:33:37 +/-TTTT
-categories: [redteam,homelab,redteamlab]
-tags: [redteam,homelab,redteamlab]
+categories: [redteam]
+tags: [homelab]
 comments: true
 image:
   path: https://xphantom.nl/assets/img/posts/8/cover.png
