@@ -1,15 +1,13 @@
 ---
-title: Build Your Own Offensive Security Lab: A Step-by-Step Guide with Ludus
+title: Build Your Own Offensive Security Lab A Step-by-Step Guide with Ludus
 date: 2025-02-09 13:33:37 +/-TTTT
 categories: [redteam,homelab,redteamlab]
-tags: [redteam,homelab,redteamlab]     # TAG names should always be lowercase
+tags: [redteam,homelab,redteamlab]
 comments: true
 image:
   path: https://xphantom.nl/assets/img/posts/8/Red-Team-Lab-Cover.png
   show_in_post: true
 ---
-
-
 ## TL;DR: 
 
 If you’re looking to set up your own lab for practicing offensive and defensive security techniques, this post is for you. In this guide, I’ll walk you through my experience with Ludus and demonstrate how to build a red team lab using this tool—the simplest and most efficient method I’ve discovered so far. The lab will feature an Active Directory environment *(using GOAD)* integrated with an XDR/SIEM solution *(Wazuh)*.
