@@ -5,7 +5,7 @@ categories: [redteam,homelab,redteamlab]
 tags: [redteam,homelab,redteamlab]
 comments: true
 image:
-  path: https://xphantom.nl/assets/img/posts/8/Red-Team-Lab-Cover.png
+  path: https://xphantom.nl/assets/img/posts/8/cover.png
   show_in_post: true
 ---
 ## TL;DR: 
