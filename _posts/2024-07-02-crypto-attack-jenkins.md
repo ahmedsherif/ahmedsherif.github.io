@@ -10,7 +10,6 @@ image:
   ---
 
 ## TL;DR:
-
 As a red teamer, you encountered a Jenkins instance that is vulnerable to CVE-2024-23897, which allowed for limited arbitrary file read. Without credentials and with the /script endpoint inaccessible, you sought to leverage this vulnerability by revealing Hudson to decypt the credentials.
 
 ## What is CVE-2024-23897?
